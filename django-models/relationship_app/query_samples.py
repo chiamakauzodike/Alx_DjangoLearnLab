@@ -4,13 +4,9 @@ from relationship_app.models import Author, Book, Library, Librarian
  
 def get_books_by_author(author_name): 
     try: 
-        #author_name = "George Orwell"
         author = Author.objects.get(name=author_name) 
         books = author.books.all() 
-        books_by_author = Book.objects.filter(author=author)
-        for book in books_by_author:
-            print(book.title)
-        return books_by_author 
+        return books 
     except Author.DoesNotExist: 
         return f"Author '{author_name}' does not exist." 
     
