@@ -7,9 +7,9 @@ from .models import Author, Book, Library, Librarian
 
 def list_books(request):
     """This view should render a simple text list of book titles and their authors"""
-    books = Book.objects.select_related('author').all()
-    book_list = "\n".join([f"{book.title} by {book.author.name}" for book in books])
-    return HttpResponse(book_list, content_type="text/plain")
+    books = Book.objects.all()
+    #book_list = "\n".join([f"{book.title} by {book.author.name}" for book in books])
+    return render(request, 'relationship_app/list_books.html', {'books': books})
 
 """class based view displaying library details and its book"""
 class LibraryDetailView(DetailView):
