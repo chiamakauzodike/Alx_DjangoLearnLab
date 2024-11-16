@@ -6,6 +6,7 @@ from .models import Author, Book, Library, Librarian
 # Create your views here.
 
 def list_books(request):
+    """This view should render a simple text list of book titles and their authors"""
     books = Book.objects.select_related('author').all()
     return render(request, 'list_books.html', {'books': books})
 
