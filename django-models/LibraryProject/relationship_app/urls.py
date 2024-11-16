@@ -13,5 +13,5 @@ urlpatterns = [
     path('books/', list_books, name='list-books'),
     # class based view for displaying library details
     path('libraries/<int:pk>/', LibraryDetailView.as_view(), name='library-detail'),
-    path("", views.relationship, name="relationship"),
+    #path("", views.relationship, name="relationship"),
 ]
