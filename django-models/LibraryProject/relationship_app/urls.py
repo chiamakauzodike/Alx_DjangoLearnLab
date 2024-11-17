@@ -2,11 +2,9 @@ from django.urls import path
 
 from . import views
 from django.views.generic import TemplateView
-from .views import (
-    LibraryDetailView,
-    list_books,
-    relationship
-)
+from .views import list_books
+from .views import LibraryDetailView
+from .views import relationship
 
 urlpatterns = [
     # function based view for listing books
