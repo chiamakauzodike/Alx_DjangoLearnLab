@@ -5,6 +5,8 @@ from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from .models import Book
 from .models import Library
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 def list_books(request):
