@@ -6,6 +6,7 @@ from .views import list_books
 from .views import LibraryDetailView
 from .views import relationship
 from .views import register
+from views.register import registers
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 
@@ -16,6 +17,6 @@ urlpatterns = [
     path('libraries/<int:pk>/', LibraryDetailView.as_view(), name='library-detail'),
     path('register/', register, name='register'),
     path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),                                 
+    path('logout/', LogoutView.as_view(template_name='relationship_app/logot.html'), name='logout'),                                 
     #path("", views.relationship, name="relationship"),
 ]
