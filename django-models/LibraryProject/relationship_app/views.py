@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -9,6 +10,8 @@ from .models import Library
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
+from .forms import BookForm
 # Create your views here.
 
 def list_books(request):
@@ -58,3 +61,35 @@ def member_view(request):
 
 def relationship(request):
     return HttpResponse("Hello, world. You're at the relationship_app with various bookshelf and other connection to Author Library and Librarian class.")
+
+@permission_required('relationship_app.can_add_book', raise_exception=True) 
+def add_book(request): 
+    if request.method == 'POST': 
+        form = BookForm(request.POST) 
+        if form.is_valid(): 
+            form.save() 
+            return redirect('book_list') 
+    else: 
+        form = BookForm() 
+        return render(request, 'relationship_app/add_book.html', {'form': form})
+    
+     # Edit an existing book
+@permission_required('relationship_app.can_change_book', raise_exception=True) 
+def edit_book(request, book_id): 
+    book = get_object_or_404(Book, id=book_id) 
+    if request.method == 'POST': 
+        form = BookForm(request.POST, instance=book) 
+        if form.is_valid(): 
+            form.save() 
+            return redirect('book_list') 
+    else: form = BookForm(instance=book) 
+    return render(request, 'relationship_app/edit_book.html', {'form': form}) 
+
+# Delete a book 
+@permission_required('relationship_app.can_delete_book', raise_exception=True) 
+def delete_book(request, book_id): 
+    book = get_object_or_404(Book, id=book_id) 
+    if request.method == 'POST': 
+        book.delete() 
+        return redirect('book_list') 
+    return render(request, 'relationship_app/delete_book.html', {'book': book})
