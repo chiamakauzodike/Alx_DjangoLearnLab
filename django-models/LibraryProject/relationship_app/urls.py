@@ -12,6 +12,9 @@ from django.contrib.auth.views import LogoutView
 from .views import admin_view
 from .views import librarian_view
 from .views import member_view
+from .views import add_book
+from .views import edit_book
+from .views import delete_book
 
 urlpatterns = [
     # function based view for listing books
