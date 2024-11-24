@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseForbidden
 from .models import Book
+from .forms import BookForm
 
 
 def book(request):
@@ -37,3 +38,25 @@ def book_delete(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'myapp/book_confirm_delete.html', {'book': book})
+
+def unsafe_search(request):
+    query = request.GET.get('q','')
+    results = Book.objects.raw(f"SELECT * FROM books WHERE title LIKE '%{query}%'")
+
+def safe_search(request):
+    query = request.GET.get('q','')
+    results = Book.objects.filter(title__icontains=query)
+    return render(request, 'search_results.html', {'results': results})
+
+def create_book(request):
+    if request.method == "BOOK":
+        form = BookForm(request.BOOK)
+        if form.is_valid():
+            # Safe input handling
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            Book.objects.create(title=title, content=content)
+            return redirect('success_page')
+        else:
+            form = BookForm()
+        return render(request, 'create_post.html', {'form': form})
