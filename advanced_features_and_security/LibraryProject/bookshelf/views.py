@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseForbidden
-from .models import Post
+from .models import Book
 
 
 def book(request):
@@ -11,29 +11,29 @@ def book(request):
 
 # Create your views here.
 @permission_required('myapp.can_view', raise_exception=True)
-def post_list(request):
-    posts = Post.objects.all()
-    return render(request, 'myapp/post_list.html', {'posts': posts}) 
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'myapp/book_list.html', {'books': books}) 
 
 @permission_required('myapp.can_create', raise_exception=True)
-def post_create(request):
-    if request.method == "POST": 
+def book_create(request):
+    if request.method == "BOOK": 
         # Handle form submission 
         pass
-    return render(request, 'myapp/post_form.html')
+    return render(request, 'myapp/book_form.html')
 
 @permission_required('myapp.can_edit', raise_exception=True)
-def post_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
+def book_edit(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == "BOOK":
     # Handle form submission 
         pass
-    return render(request, 'myapp/post_form.html', {'post': post})
+    return render(request, 'myapp/book_form.html', {'book': book})
 
 @permission_required('myapp.can_delete', raise_exception=True)
-def post_delete(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        post.delete()
-        return redirect('post_list')
-    return render(request, 'myapp/post_confirm_delete.html', {'post': post})
+def book_delete(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == "BOOK":
+        book.delete()
+        return redirect('book_list')
+    return render(request, 'myapp/book_confirm_delete.html', {'book': book})
