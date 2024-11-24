@@ -11,7 +11,10 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
-from .forms import BookForm
+from django.test import TestCase, Client
+from django.contrib.auth.models import User
+from .models import UserProfile
+
 # Create your views here.
 
 def list_books(request):
@@ -93,3 +96,27 @@ def delete_book(request, book_id):
         book.delete() 
         return redirect('book_list') 
     return render(request, 'relationship_app/delete_book.html', {'book': book})
+
+
+class AdminViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.admin_user = User.objects.create_user(username='admin', password='admin123')
+        self.admin_user.userprofile.role = 'Admin'
+        self.admin_user.userprofile.save()
+        
+    def test_admin_access(self):
+        self.client.login(username='admin', password='admin123')
+        response = self.client.get('/admin/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Welcome, Admin!")
+        
+    def test_non_admin_access(self):
+        non_admin_user = User.objects.create_user(username='member', password='member123')
+        non_admin_user.userprofile.role = 'Member'
+        non_admin_user.userprofile.save()
+        
+        self.client.login(username='member', password='member123')
+        response = self.client.get('/admin/')
+        self.assertEqual(response.status_code, 302) # Redirect to /forbidden/
+        self.assertRedirects(response, '/forbidden/')
