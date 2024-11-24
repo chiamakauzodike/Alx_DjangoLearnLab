@@ -135,3 +135,23 @@ AUTHENTICATION_BACKENDS = [
     'path.to.EmailBackend',  # Your custom backend
     'django.contrib.auth.backends.ModelBackend',  # Keep the default backend as a fallback
 ]
+# Redirecting http requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000 # One year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Secure the cookies in settings
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Clickjacking protection
+X_FRAME_OPTIONS = "DENY"
+
+# Preventing MIME-sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enabling browser XSS filter
+SECURE_BROWSER_XSS_FILTER = True
