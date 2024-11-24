@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseForbidden
 from .models import Book
-from .forms import BookForm
+from .forms import ExampleForm
 
 
 def book(request):
@@ -50,7 +50,7 @@ def safe_search(request):
 
 def create_book(request):
     if request.method == "BOOK":
-        form = BookForm(request.BOOK)
+        form = ExampleForm(request.BOOK)
         if form.is_valid():
             # Safe input handling
             title = form.cleaned_data['title']
@@ -58,5 +58,5 @@ def create_book(request):
             Book.objects.create(title=title, content=content)
             return redirect('success_page')
         else:
-            form = BookForm()
+            form = ExampleForm()
         return render(request, 'create_post.html', {'form': form})
