@@ -156,6 +156,10 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # Enabling browser XSS filter
 SECURE_BROWSER_XSS_FILTER = True
 
+SECURE_PROXY_SSL_HEADER = True
+
+HTTP_X_FORWARDED_PROTO = True
+
 server {
     listen 443 ssl;
     server_name yourdomain.com;
