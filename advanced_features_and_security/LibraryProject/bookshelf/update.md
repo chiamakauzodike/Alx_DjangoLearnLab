@@ -1,1 +1,0 @@
-retrieved_book.title = "Nineteen Eighty-Four"
