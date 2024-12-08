@@ -54,9 +54,9 @@ ROOT_URLCONF = 'django_blog.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',  # Specifies the Django template engine
+        'DIRS': [BASE_DIR / 'templates'],  # Path to the global templates directory
+        'APP_DIRS': True,  # Automatically find templates in app-specific `templates/` directories
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -82,12 +82,12 @@ WSGI_APPLICATION = 'django_blog.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Use the PostgreSQL backend
-        'NAME': 'mydatabase',              # Replace with your database name
-        'USER': 'alx',              # Your database username
-        'PASSWORD': 'password',               # Your database password
-        'HOST': 'localhost',                       # Set to your database host, e.g., '127.0.0.1'
-        'PORT': '5432',                            # Default PostgreSQL port
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydatabase',
+        'USER': 'mydatabaseuser',
+        'PASSWORD': 'mypassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -126,17 +126,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-TEMPLATES = [
-    {
-        'DIRS': [BASE_DIR / 'templates'],
-    },
-]
+# TEMPLATES = [
+#     {
+#         'DIRS': [BASE_DIR / 'templates'],
+#     },
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
