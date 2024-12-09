@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 from .views import CommentCreateView, CommentUpdateView, CommentDeleteView
 from .views import PostSearchView, PostsByTagView
+from . import views
 
 urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
@@ -20,5 +21,6 @@ urlpatterns = [
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
     path('tags/<str:tag_name>/', PostsByTagView.as_view(), name='posts-by-tag'),
+    path('tags/<slug:tag_slug>/', views.PostByTagListView.as_view(), name='posts_by_tag'),
     path('search/', PostSearchView.as_view(), name='post-search'),
 ]
