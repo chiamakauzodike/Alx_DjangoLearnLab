@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     # My app
     'accounts',
+    'posts',
 ]
 
 MIDDLEWARE = [
@@ -130,4 +131,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Use custom  user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# To enable pagination
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+}
+
 
