@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework import permissions, status
 from .models import Post, Comment
 from accounts.models import CustomUser
 from .serializers import PostSerializer, CommentSerializer
@@ -35,7 +35,7 @@ class FeedView(APIView):
         # Get posts from followed users
         followed_users = request.user.followings.all()
         posts = Post.objects.filter(author__in=followed_users).order_by('-created_at')
-
+    
         # Serialize the posts
         from .serializers import PostSerializer
         serializer = PostSerializer(posts, many=True)
