@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
@@ -8,6 +8,7 @@ from accounts.models import CustomUser
 from .serializers import PostSerializer, CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from  notifications.models import Notification
+
 # Create your views here.
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -42,22 +43,27 @@ class FeedView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class PostDetailView(APIView):
+    """Retrieve a single post by its ID."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        post = generics.get_object_or_404(Post, pk=pk)  # Ensure a 404 is raised if the post is not found
+        serializer = PostSerializer(post)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class LikePostView(APIView):
+    """
+    Handle liking a post.
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)  # Use get_object_or_404 to fetch the post
         like, created = Like.objects.get_or_create(user=request.user, post=post)
 
         if created:
-            # Notify the post's author about the like
-            Notification.objects.create(
-                recipient=post.author,
-                actor=request.user,
-                verb="liked your post",
-                target=post
-            )
-            return Response({'message': 'Post liked'}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'Post liked successfully'}, status=status.HTTP_201_CREATED)
         return Response({'message': 'You have already liked this post'}, status=status.HTTP_400_BAD_REQUEST)
 
 class UnlikePostView(APIView):
