@@ -26,10 +26,12 @@ class UserSerializer(serializers.ModelSerializer):
         user = get_user_model().objects.create_user(**validated_data)
         if password:
             user.set_password(password)  # Hash the password
-            user.save()
+            user.save()  
+        # Create a token for the new user
+        Token.objects.create(user=user)
         return user
-
-        #  Serializer for managing user follow actions. Create a token for the new user
+    
 class FollowSerializer(serializers.Serializer):
+    """Serializer for managing user follow actions"""
     follower = serializers.CharField(read_only=True)
     following = serializers.CharField()
