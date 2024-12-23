@@ -55,17 +55,25 @@ class PostDetailView(APIView):
 class LikePostView(APIView):
     """
     Handle liking a post.
+    Also create notification
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = generics.get_object_or_404(Post, pk=pk)  # Use get_object_or_404 to fetch the post
+        post = generics.get_object_or_404(Post, pk=pk)  # Ensure the post exists
         like, created = Like.objects.get_or_create(user=request.user, post=post)
 
         if created:
+            # Create a notification for the post author
+            Notification.objects.create(
+                recipient=post.author,  # The author of the post
+                actor=request.user,    # The user who liked the post
+                verb="liked",
+                target=post
+            )
             return Response({'message': 'Post liked successfully'}, status=status.HTTP_201_CREATED)
         return Response({'message': 'You have already liked this post'}, status=status.HTTP_400_BAD_REQUEST)
-
+    
 class UnlikePostView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
